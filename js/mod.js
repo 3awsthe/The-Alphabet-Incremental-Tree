@@ -43,10 +43,11 @@ function getPointGen() {
 		return new Decimal(0)
 	let gain=new Decimal(0.25)
 	gain=gain.mul(tmp.OR.buyables[11].effect)
-	gain=gain.mul(new Decimal(1).mul(getBuyableAmount("OR",21).mul(1.5)).add(1))
 	if(hasUpgrade("OR",11))gain=gain.mul(1.5)
 	if(hasUpgrade("OR",12))gain=gain.mul(upgradeEffect("OR",12))
-	if(hasUpgrade("OR",14))gain=gain.mul(upgradeEffect("OR",14))
+	if(hasUpgrade("OR",15))gain=gain.mul(upgradeEffect("OR",15))
+	if(hasUpgrade("IM",11))gain=gain.mul(1.75)
+	if(hasUpgrade("IM",14))gain=gain.mul(upgradeEffect("IM",14))
 	return gain
 }
 
