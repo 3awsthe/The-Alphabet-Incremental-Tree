@@ -39,9 +39,6 @@ addLayer("OR",{
 				else eff=1
 				return eff=eff
 			},
-			buyMax(){
-				return Decimal.floor(Decimal.log2(player.points))
-			},
 			style:{
 				"width":"150px",
 				"height":"150px"
@@ -115,7 +112,7 @@ addLayer("OR",{
 		if(hasUpgrade("OR",14))return 0.05
 	},
 	automateStuff(){
-		if(layers.OR.buyables[11].canAfford()&&hasUpgrade("IM",15))setBuyableAmount("OR",11,layers.OR.buyables[11].buyMax())
+		if(player.OR.points.gte(Decimal.pow(2,getBuyableAmount("OR",11).add(1)))&&hasUpgrade("IM",15)){setBuyableAmount("OR",11,Decimal.floor(Decimal.log2(player.OR.points)))}
 	},
 	tabFormat:{
 		"Buyables&Upgrades":{
@@ -139,7 +136,7 @@ addLayer("IM",{
 	row:1,
 	startData(){return{
 		unlocked:true,
-		points:new Decimal(0)
+		points:new Decimal(20)
 		}
 	},
 	color:"#ff5d00",
@@ -177,9 +174,12 @@ addLayer("IM",{
 		},
 		15:{
 			title:"游戏变得越来越简单了",
-			description:"修改制造机的价格公式",
+			description:"修改制造机的价格公式，自动购买制造机而不花费字母源",
 			cost:new Decimal(16),
 		}
+	},
+	buyables:{
+		
 	},
 	tabFormat:{
 		"Upgrades":{

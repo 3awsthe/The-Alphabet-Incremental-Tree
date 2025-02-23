@@ -89,6 +89,7 @@
 				</ul>
 			</div>
 			<overlay-head v-if="!(tmp.gameEnded && !player.keepGoing)"></overlay-head>
+			<div id="marquee" style="height:20px;width:500px;background-color:#0f0f0f;radius:3px;border-radius:10px;border-style:solid;border-color:white;white-space: nowrap;overflow: hidden;">hello :)</div>
 			<div class="sideLayers">
 				<div v-for="(node, index) in OTHER_LAYERS['side']">
 					<tree-node :layer='node' :abb='tmp[node].symbol' :size="'small'" :key="'side' + index"></tree-node>
@@ -131,6 +132,97 @@
 
 		</div>
 		<div class = "bg2" v-bind:style = "tmp.backgroundStyle"></div>
-
+		<script>
+			let mq=0
+			function randomNews()
+			{
+				let newsarr=[
+					"这是本游戏的第一条新闻。真的。我不敢确定是不是你看到的第一条新闻，不过这真的是本游戏的第一条新闻。",
+					"这是第几条？",
+					"拜谢 xlt114514。",
+					"从前有一个数据结构叫做优先栈。",
+					"我应该说什么来着？",
+					"1.79eeeeeeeeeee308",
+					"重大消息：【数据删除】。",
+					"-我知道你做滚动新闻花费了很久的时间，不过真的有玩家会看这个东西吗？-有的兄弟有的，你看屏幕前面。",
+					"谁发明的红酒蔓越莓月饼？",
+					"这里怎么有只虫子？",
+					"服务器繁忙，请稍后再试。",
+					"超越那棵树。",
+					"打破永恒。",
+					"迄今为止，你至少阅读了 1 个新闻。",
+					"2^1024 和 1.79e308 哪个更大？",
+					"αβγδεζηθικλμνξοπρστυφχψω",
+					"这是一条与众不同的新闻，不信你仔细观察，你会发现这条新闻和所有的其他新闻的内容都不一样。",
+					"手动书写字母？弱爆了，我们都用制造机制造字母了。",
+					"改↓革↑春↑风→吹↑满↓地↓",
+					"关注 PriorityStack 谢谢喵",
+					"取关【数据删除】谢谢喵 ←广告位招租",
+					"广告位招租",
+					"广告位不招租",
+					"> <",
+					"你好。你可能很好，不过我现在倒不是很好。现在是星期六的 23:03，我终于改完了滚动新闻的代码。不过我似乎一不小心把作业的事忘了，这是个坏事。",
+					"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890",
+					"我不明白。",
+					"拜托，你很弱欸。",
+					"我超勇的好吧。",
+					"。。。。。。",
+					"你好。",
+					"欸？你是谁？",
+					"你怎么才这么点字母？弱爆了。我告诉你，我已经有【数据删除】字母了。",
+					"人不会在同一条河掉两次。",
+					"这是什么？优先栈？尝一口。em，emmm，emmmmmmm，哦，啊！啊！！！！！Cannot read properties of undefined (reading 'points')！",
+					"这是新闻？",
+					"我们应不应该播一些真正的新闻？",
+					"插播一条天气新闻：宝宝肚肚打雷了。",
+					"优先栈是什么什么品种的奶龙？",
+					"哦，这样的吗。",
+					"有款游戏越打越想吐就是AD反物质维度。这里没有人叫你老弟，因为都叫你 Destroyer。",
+					"There are so many alphabets.",
+					"In oah.Ehz il ihs uoy naix nahz.",
+					"古希腊掌管字母的神",
+					"槟榔真该被禁止了。上次在路边看见以为是狗屎捡起来吃了，结果是嚼完的槟榔。"
+				]
+				let x=Math.floor(Math.random()*(newsarr.length))
+				let news=newsarr[x]
+				console.log(news.length)
+				let marquee=document.getElementById("marquee")
+				if(mq==0){
+					let marqueed=document.createElement("style")
+					marqueed.id="mq"
+					marqueed.innerHTML=`
+					@keyframes news{
+					0%
+					    {
+					        transform:translateX(`+(100+(news.length)*1.5)+`%)
+					    }
+					100%
+					    {
+					        transform:translateX(-`+(100+(news.length)*1.5)+`%)
+					    }
+					}`
+					document.head.appendChild(marqueed)
+					mq=1
+				}
+				else{
+					let marqueed=document.getElementById("mq")
+					marqueed.innerHTML=`
+					@keyframes news{
+					0%
+					    {
+					        transform:translateX(`+(100+(news.length)*1.5)+`%)
+					    }
+					100%
+					    {
+					        transform:translateX(-`+(100+(news.length)*1.5)+`%)
+					    }
+					}`
+				}
+				let second=10+(news.length)*0.025
+				marquee.innerHTML=`<p class="marquee-box" style="animation:news linear;animation-duration:`+second+`s">`+news+`</p>`
+				setTimeout(function(){randomNews()},second*1000)
+			}
+			randomNews()
+		</script>
 	</div>
 </body>
