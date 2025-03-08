@@ -5,7 +5,9 @@ addLayer("OR",{
 	row:0,
 	startData(){return{
 		unlocked:true,
-		points:new Decimal(0)
+		points:new Decimal(0),
+		jq:0,
+		jq2:0
 		}
 	},
 	color:"#33aa00",
@@ -78,7 +80,11 @@ addLayer("OR",{
 			title:"自增",
 			description:"字母增益字母获得",
 			cost:new Decimal(150),
-			effect(){return player.points.add(1).pow(0.1)},
+			effect()
+			{
+				if(hasUpgrade("OR",16))return player.points.add(1).pow(0.15)
+				else return player.points.add(1).pow(0.1)
+			},
 			effectDisplay(){return "x"+format(upgradeEffect("OR",12))},
 			unlocked(){return hasUpgrade("OR",11)}
 		},
@@ -101,9 +107,42 @@ addLayer("OR",{
 			title:"我认为这个不错",
 			description:"字母源增益字母",
 			cost:new Decimal(5000),
-			effect(){return player.OR.points.add(1).pow(0.125)},
+			effect()
+			{
+				if(hasUpgrade("OR",21))return player.OR.points.add(1).pow(0.2)
+				else return player.OR.points.add(1).pow(0.125)
+			},
 			effectDisplay(){return "x"+format(upgradeEffect("OR",15))},
 			unlocked(){return hasUpgrade("OR",14)}
+		},
+		16:{
+			title:"古希腊掌管增益的神",
+			description:"增强“自增”",
+			cost:new Decimal(2e6),
+			unlocked(){return hasUpgrade("IM",16)&&hasUpgrade("OR",15)}
+		},
+		21:{
+			title:"古希腊掌管增益的神 II",
+			description:"增强“我认为这个不错”",
+			cost:new Decimal(1e7),
+			unlocked(){return hasUpgrade("OR",16)}
+		}
+	},
+	clickables:{
+		11:{
+			title:"1-1",
+			onClick(){
+				player.OR.jq=1;
+			},
+			canClick(){return 1}
+		},
+		12:{
+			title:"1-1",
+			onClick(){
+				player.OR.jq2=1;
+			},
+			canClick(){return 1},
+			unlocked(){return hasUpgrade("OR",13)}
 		}
 	},
 	passiveGeneration()
@@ -112,10 +151,29 @@ addLayer("OR",{
 		if(hasUpgrade("OR",14))return 0.05
 	},
 	automateStuff(){
-		if(player.OR.points.gte(Decimal.pow(2,getBuyableAmount("OR",11).add(1)))&&hasUpgrade("IM",15)){setBuyableAmount("OR",11,Decimal.floor(Decimal.log2(player.OR.points)))}
+		if(player.OR.points.gte(Decimal.pow(2,getBuyableAmount("OR",11).add(1)))&&hasUpgrade("IM",15)){setBuyableAmount("OR",11,Decimal.floor(Decimal.log2(player.OR.points)))}/*if(player.OR.jq==1)
+		{
+			alert("为什么……")
+			alert("为什么我会来到这个地方……")
+			alert("这究竟是一个梦还是彻彻底底的现实……")
+			alert("……")
+			alert("我多少次对着那泛满白光的墙壁思考这个问题。")
+			alert("不过显然这对我逃出这里并没有什么用处。")
+			alert("……")
+			alert("我希望再也没有人会来到这个房间，尽管有人来是最好的。"),
+			player.OR.jq=0
+		}
+		if(player.OR.jq2==1)
+		{
+			alert("增益机？")
+			alert("眼前那个大型的机子吸引了我的注意。")
+			alert("我试着购买了这个叫“增益机”的东西，越来越多的字母从天而降，出现在我的面前。")
+			player.OR.jq2=0
+		}
+		*/
 	},
 	tabFormat:{
-		"Buyables&Upgrades":{
+		"升级和可购买项":{
 			content:[
 				"main-display",
 				"blank",
@@ -126,7 +184,14 @@ addLayer("OR",{
 				"blank",
 				"upgrades"
 			]
+		},
+		/*
+		"剧情":{
+			content:[
+				"clickables"
+			]
 		}
+		*/
 	}
 })
 addLayer("IM",{
@@ -136,7 +201,7 @@ addLayer("IM",{
 	row:1,
 	startData(){return{
 		unlocked:true,
-		points:new Decimal(20)
+		points:new Decimal(0)
 		}
 	},
 	color:"#ff5d00",
@@ -149,46 +214,115 @@ addLayer("IM",{
 	exponent:0.5,
 	branches:["OR"],
 	resetDescription(){return "大冲击以获得 "},
+	gainMult()
+	{
+		mult=new Decimal(1)
+		mult=mult.mul(tmp.IM.buyables[11].effect)
+		return mult
+	},
 	upgrades:{
 		11:{
 			title:"加速！",
 			description:"字母增益 x1.75",
-			cost:new Decimal(1)
+			cost:new Decimal(1),
 		},
 		12:{
 			title:"打破时间墙的超超超级大大大秘密！",
 			description:"每秒获得重置时 20% 的字母源",
-			cost:new Decimal(2)
+			cost:new Decimal(2),
+			unlocked(){return hasUpgrade("IM",11)}
 		},
 		13:{
 			title:"疯狂制造",
-			description:"增强制造机的增益效果",
-			cost:new Decimal(4)
+			description:"增强制造机的增益效果并将字母增益 x3",
+			cost:new Decimal(3),
+			unlocked(){return hasUpgrade("IM",12)}
 		},
 		14:{
 			title:"正确的",
 			description:"冲击点数增益字母",
-			cost:new Decimal(8),
+			cost:new Decimal(4),
 			effect(){return player.IM.points.add(1).pow(0.4)},
-			effectDisplay(){return "x"+format(upgradeEffect("IM",14))}
+			effectDisplay(){return "x"+format(upgradeEffect("IM",14))},
+			unlocked(){return hasUpgrade("IM",13)}
 		},
 		15:{
-			title:"游戏变得越来越简单了",
+			title:"EASY",
 			description:"修改制造机的价格公式，自动购买制造机而不花费字母源",
-			cost:new Decimal(16),
+			cost:new Decimal(4),
+			unlocked(){return hasUpgrade("IM",14)}
+		},
+		16:{
+			title:"这么多吗",
+			description:"解锁一些 OR 层升级",
+			cost:new Decimal(6),
+			unlocked(){return hasUpgrade("IM",15)}
+		},
+		21:{
+			title:"看，是挑战",
+			description:"解锁一个 IM 层挑战",
+			cost:new Decimal(20),
+			unlocked(){return hasUpgrade("IM",16)}
 		}
 	},
 	buyables:{
-		
+		11:{
+		    title:"冲击精华",
+		    display(){
+				return "将冲击点数增益 x"+format(tmp.IM.buyables[11].effect)+"<br>花费 "+format(Decimal.pow(5,getBuyableAmount("IM",11)))+" 冲击点数<br>你有 "+format(getBuyableAmount("IM",11))+" 制造机"
+			},
+		    canAfford(){
+				return player.IM.points.gte(Decimal.pow(5,getBuyableAmount("IM",11)))
+		    },
+			buy(){
+				player.IM.points=player.IM.points.minus(Decimal.pow(5,getBuyableAmount("IM",11)))
+				setBuyableAmount("IM",11,getBuyableAmount("IM",11).add(1))
+			},
+			effect(){
+				if(getBuyableAmount("IM",11).gte(1)){
+					eff=Decimal.pow(2,getBuyableAmount("IM",11))
+				}
+				else eff=1
+				return eff=eff
+			},
+			style:{
+				"width":"150px",
+				"height":"150px"
+			},
+			//unlocked(){return hasUpgrade("IM",16)}
+		},
+	},
+	challenges:{
+		11:{
+			name:"^_^",
+			challengeDescription:"字母 ^0.75",
+			rewardDescription:"字母增益 ^1.1",
+			canComplete(){return player.OR.points.gte(1000000)},
+			goalDescription:"1,000,000 字母源",
+			unlocked(){return hasUpgrade("IM",21)}
+		},
 	},
 	tabFormat:{
-		"Upgrades":{
+		"升级":{
 			content:[
 				"main-display",
 				"blank",
 				["prestige-button",function(){return ""}],
 				"blank",
-				"upgrades"
+				"upgrades",
+			]
+		},
+		"可购买项":{
+			content:[
+			"blank",
+			"buyables"
+			],
+			//unlocked(){return hasUpgrade("IM",16)}
+		},
+		"挑战":{
+			content:[
+				"blank",
+				"challenges"
 			]
 		}
 	}

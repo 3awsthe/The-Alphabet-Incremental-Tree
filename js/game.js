@@ -3,8 +3,8 @@ var needCanvasUpdate = true;
 
 // Don't change this
 const TMT_VERSION = {
-	tmtNum: "2.7",
-	tmtName: "Δ"
+	tmtNum: "2.6.6.2",
+	tmtName: "Fixed Reality"
 }
 
 function getResetGain(layer, useType = null) {
@@ -184,12 +184,11 @@ function doReset(layer, force=false) {
 		if (tmp[layer].type=="static") {
 			if (tmp[layer].baseAmount.lt(tmp[layer].nextAt)) return;
 			gain =(tmp[layer].canBuyMax ? gain : 1)
-		}
+		} 
 
-		if (layers[layer].onPrestige){
-			updateMilestones(layer)
+
+		if (layers[layer].onPrestige)
 			run(layers[layer].onPrestige, layers[layer], gain)
-		}
 		
 		addPoints(layer, gain)
 		updateMilestones(layer)
@@ -247,19 +246,14 @@ function resetRow(row) {
 
 function startChallenge(layer, x) {
 	let enter = false
-	if (!player[layer].unlocked || !tmp[layer].challenges[x].unlocked || !canEnterChallenge(layer, x)) return
-
+	if (!player[layer].unlocked || !tmp[layer].challenges[x].unlocked) return
 	if (player[layer].activeChallenge == x) {
-		// This needs to be embedded due to how 'enter' works
-		if(canExitChallenge(layer, x)){
-			completeChallenge(layer, x)
-			Vue.set(player[layer], "activeChallenge", null)
-		}
-	}
-	else {
+		completeChallenge(layer, x)
+		Vue.set(player[layer], "activeChallenge", null)
+		} else {
 		enter = true
-	}
-	if(enter || canExitChallenge(layer, x)) doReset(layer, true)
+	}	
+	doReset(layer, true)
 	if(enter) {
 		Vue.set(player[layer], "activeChallenge", x)
 		run(layers[layer].challenges[x].onEnter, layers[layer].challenges[x])

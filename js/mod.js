@@ -47,7 +47,10 @@ function getPointGen() {
 	if(hasUpgrade("OR",12))gain=gain.mul(upgradeEffect("OR",12))
 	if(hasUpgrade("OR",15))gain=gain.mul(upgradeEffect("OR",15))
 	if(hasUpgrade("IM",11))gain=gain.mul(1.75)
+	if(hasUpgrade("IM",13))gain=gain.mul(3)
 	if(hasUpgrade("IM",14))gain=gain.mul(upgradeEffect("IM",14))
+	if(inChallenge("IM",11))gain=gain.pow(0.75)
+	if(hasChallenge("IM",11))gain=gain.pow(1.1)
 	return gain
 }
 
@@ -82,4 +85,3 @@ function maxTickLength() {
 // you can cap their current resources with this.
 function fixOldSave(oldVersion){
 }
-

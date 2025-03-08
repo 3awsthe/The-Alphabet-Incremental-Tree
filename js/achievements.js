@@ -31,7 +31,7 @@ addLayer("AC",{
 		},
 		13:{
 			name:"时间墙大师",
-			tooltip:"获得 5 制造机",
+			tooltip:"获得 6 制造机",
 			image(){
 				if(hasAchievement("AC",13))return "./js/Pictures/13.png"
 				else return ""
@@ -69,7 +69,7 @@ addLayer("AC",{
 			name:"这太好玩了",
 			tooltip:"获得 10 冲击点数",
 			image(){
-				if(hasAchievement("AC",16))return "./js/Pictures/17.png"
+				if(hasAchievement("AC",17))return "./js/Pictures/17.png"
 				else return ""
 			},
 			done(){return player.IM.points.gte(10)}
